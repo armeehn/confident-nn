@@ -14,8 +14,8 @@ from torch.autograd import grad
 
 parser = argparse.ArgumentParser('Gathers statistics of an ImageNet model and writes these stats into a DataFrame.')
 
-parser.add_argument('data-dir', type=str,
-        metavar='DIR', 
+parser.add_argument('--data-dir', type=str,
+        metavar='DIR',
         help='Directory where ImageNet data is saved')
 parser.add_argument('--model', type=str, default='resnet152',
         choices=['resnet152'], help='Model')
@@ -51,7 +51,7 @@ def main():
             traindir = os.path.join(args.data_dir, 'train')
             valdir = os.path.join(args.data_dir, 'val')
 
-            
+
 
             loader = torch.utils.data.DataLoader(
                                 datasets.ImageFolder(valdir, transforms.Compose([
@@ -77,7 +77,7 @@ def main():
                 x = torch.from_numpy(x)
 
             test = torch.utils.data.TensorDataset(x,y)
-            loader = torch.utils.data.DataLoader(test, 
+            loader = torch.utils.data.DataLoader(test,
                     batch_size=args.batch_size,
                     num_workers=4,
                     shuffle=False,
@@ -123,7 +123,7 @@ def main():
     m.eval()
     for p in m.parameters():
         p.requires_grad_(False)
-        
+
     if torch.cuda.device_count()>1:
         m = nn.DataParallel(m)
 
@@ -144,7 +144,7 @@ def main():
 
             dx, = grad(l, x, create_graph=self.create_graph, retain_graph=self.retain_graph)
             dx = dx.view(bsz, -1)
-            
+
             if self.norm in [2,'2']:
                 n = dx.norm(p=2,dim=-1)
             elif self.norm in [1,'1']:
@@ -204,7 +204,7 @@ def main():
         log = pmax.log()
 
         p5 = p.topk(5,dim=-1)[0]
-        sump5 = p.sum(dim=-1)
+        sump5 = p5.sum(dim=-1)
 
         pnorm = p.norm(dim=-1)
         loss = criterion(yhat, y)

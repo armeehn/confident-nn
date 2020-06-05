@@ -1,6 +1,6 @@
 # Empirical Confidence Estimates for Classification
 
-This repo contains code for the paper [Empirical confidence estimates for classification by deep neural networks](https://arxiv.org/abs/1903.09215). The idea of the paper is to use auxillary variables (model entropy, gradient size, dropout variance etc) to improve the confidence of the model's predictions. 
+This repo contains code for the paper [Empirical confidence estimates for classification by deep neural networks](https://arxiv.org/abs/1903.09215). The idea of the paper is to use auxillary variables (model entropy, gradient size, dropout variance etc) to improve the confidence of the model's predictions.
 
 For example, model entropy (entropy of the model's softmaxed logits) is highly correlated with the probability that the model's classification is correct. Thus during model inference, although the correct labels are unknown, it may be possible to use model entropy as an extra piece of information to improve the estimate of the probability that the model is correct.
 
@@ -10,7 +10,7 @@ We measure the value of an auxillary variable using the *odds ratio*, which is a
 
 First, we generate a DataFrame of per-image variables for a pretrained model, using the script `eval_model.py`
 ```
-python eval_model.py /path/to/data/dir/ --model resnet152 --dataset imagenet
+python eval_model.py --data-dir /path/to/data/dir/ --model resnet152 --dataset imagenet
 ```
 This will save a pickled pandas DataFrame to `logs/imagenet/resnet152/eval.pkl`
 
@@ -24,7 +24,7 @@ X: rank, Y: model_entropy
 E[Bayes ratio, top1] = 13.619
 E[Bayes ratio, top5] = 8.184
 ```
-Here `rank` is the rank of the correct label in the sorted list of the model's softmax probabilities. This script outputs the Bayes ratio for model entropy for both Top1 and  Top5. This result says knowing the model entropy is worth about 8 times more valuable than knowing the model's average accuracy alone. 
+Here `rank` is the rank of the correct label in the sorted list of the model's softmax probabilities. This script outputs the Bayes ratio for model entropy for both Top1 and  Top5. This result says knowing the model entropy is worth about 8 times more valuable than knowing the model's average accuracy alone.
 
 To help visualize this a bit better, let's bin our images into 100 equal bins based on model entropy. In each bin, we will count the number of Top1 (green), Top5 (blue), and incorrect (orange) images. We then plot this histogram with `frequency.py`:
 ```
